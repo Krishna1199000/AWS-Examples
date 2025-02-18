@@ -1,5 +1,8 @@
 # Define Gitpod Configuration
 tasks:
+  - name: utils
+    before: |
+      sudo apt-get install tree
   - name: aws-cli
     init: |
       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

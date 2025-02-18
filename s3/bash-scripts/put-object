@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
 
-mkdir -p $OUTPUT_DIR
+echo "== put-object"
 
 
+if [ -z "$1" ]; then
+    echo "There needs to be a bucket name eg. ./bucket my-bucket-name"
+    exit 1
+fi
 
-NUM_FILES=$((RANDOM % 6 + 5))
 
-for ((i=1;i<=$NUM_FILES;i++)); do
+if [ -z "$2" ]; then
+    echo "There needs to be a filename prefix eg. ./bucket my-bucket-name filename"
+    exit 1
+fi
 
-    # Generate a random filename
-    FILENAME="$OUTPUT_DIR/file_$i.txt"
 
-    # Generate random data and write it to the file
+BUCKET_NAME=$1
+FILENAME=$2
 
-    dd if=/dev/urandom of="$FILENAME" bs=1024 count=$((RANDOM % 1024 + 1)) 2>/dev/null
-done
+OBJECT_KEY=$(basename "$FILENAME")
+aws s3api put-object \
+--bucket $BUCKET_NAME \
+--body $FILENAME \
+--key $OBJECT_KEY
